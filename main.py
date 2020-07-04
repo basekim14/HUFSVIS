@@ -1,4 +1,4 @@
-#!python3
+#-*- coding:utf-8 -*-
 # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                basekim14  Project               #
 #                   - HUFSVIS -                   #
@@ -6,6 +6,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 import appex, ui
+import requests
 from bs4 import BeautifulSoup
 
 def clear_button_tapped(sender):
@@ -23,9 +24,15 @@ def main():
 	clear_btn.action = clear_button_tapped
 	v.add_subview(clear_btn)
 	appex.set_widget_view(v)
-	text = "한글이 이쁘"
+	text = "이쁜 한글 폰트"
 	label.text = "Clipboard:\n" + text
-	
+
+notices = [['07/03', '2020-1학기 이중전공 변경 배정 확정 공고', 'http://builder.hufs.ac.kr/user/boardList.action?command=view&page=1&boardId=109336176&boardSeq=139236136'],
+           ['06/29', '국내대학 학점교류 안내', 'http://builder.hufs.ac.kr/user/boardList.action?command=view&page=1&boardId=109336176&boardSeq=139024031'],
+           ['06/29', '2020-여름계절학기 재수강 연결 일정 공고', 'http://builder.hufs.ac.kr/user/boardList.action?command=view&page=1&boardId=109336176&boardSeq=139000702'],
+           ['06/29', '2020-1학기 원격수업 운영 및 우수수업사례 설문조사', 'http://builder.hufs.ac.kr/user/boardList.action?command=view&page=1&boardId=109336176&boardSeq=138997975'],
+           ['06/19', '2020-여름계절학기 등록기간 연장 및 환불 안내', 'http://builder.hufs.ac.kr/user/boardList.action?command=view&page=1&boardId=109336176&boardSeq=138611252']]
+
 if __name__ == "__main__":
 	main()
 	
