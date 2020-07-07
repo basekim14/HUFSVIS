@@ -11,7 +11,7 @@ tr_tags = soup.find_all("tr")
 NOTICES = []
 for tr_tag in tr_tags[1:]:
     td_tags = tr_tag.find_all("td")
-    
+
     if td_tags[0].find("img"):
         continue
     title_token = td_tags[1].get_text().split()
@@ -24,7 +24,6 @@ for tr_tag in tr_tags[1:]:
     NOTICES.append({"date": date, "title": title, "url": url})
     if len(NOTICES) >= 5:
         break
-   
 """
 for tr_tag in tr_tags:
     td_tags = tr_tag.select("td")
@@ -43,3 +42,4 @@ for tr_tag in tr_tags:
         break
 """
 print(NOTICES)
+
