@@ -7,7 +7,7 @@
 
 import appex, ui
 import os
-import time
+# import time
 import webbrowser
 from math import ceil, floor
 import requests
@@ -25,7 +25,7 @@ class LauncherView(ui.View):
             *args,
             **kwargs)
         self.buttons = []
-        time_info = notices.pop()
+        # time_info = notices.pop()
         for n in notices:
             btn = ui.Button(
                 title=(" " + n["date"] + " " + n["title"]).ljust(100),
@@ -37,7 +37,7 @@ class LauncherView(ui.View):
                 corner_radius=6)
             self.add_subview(btn)
             self.buttons.append(btn)
-
+        """
         time_btn = ui.Button(
             title="(Update: " + time_info + ")",
             font=("Menlo", 12),
@@ -46,6 +46,7 @@ class LauncherView(ui.View):
             corner_radius=6)
         self.add_subview(time_btn)
         self.buttons.append(time_btn)
+        """
 
     def layout(self):
         bw = self.width / COLS
@@ -59,13 +60,13 @@ class LauncherView(ui.View):
     def button_action(self, sender):
         webbrowser.open(sender.name)
 
-
 def crawling_notice():
     URL = "http://builder.hufs.ac.kr/user/indexSub.action?codyMenuSeq=37080&siteId=hufs&menuType=T&uId=4&sortChar=AB&linkUrl=04_0202"
     res = requests.get(URL)
     soup = BeautifulSoup(res.content, "html.parser")
     
     tr_tags = soup.find_all("tr")
+    
     NOTICES = []
     for tr_tag in tr_tags[1:]:
         td_tags = tr_tag.find_all("td")
@@ -83,9 +84,15 @@ def crawling_notice():
         if len(NOTICES) >= 5:
             break
     
+    """
     now = time.localtime()
     NOTICES.append("%04d/%02d/%02d %02d:%02d"%(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min))
+    """
     return NOTICES
+
+def input_data(l):
+    
+    return NOITCES
 
 def main():
     widget_name = __file__ + str(os.stat(__file__).st_mtime)
