@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                basekim14  Project               #
-#                   - HUFSVIS -                   #
+#                  - HUFSVIS_iOS -                #
 #      HUFS's Academic Notice Crawling Widget     #
 # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -16,6 +16,8 @@ from bs4 import BeautifulSoup
 
 COLS = 1
 ROWS = 4
+LINES = 7
+MAX_LEN = 38
 
 class LauncherView(ui.View):
     def __init__(self, notices, *args, **kwargs):
@@ -33,7 +35,7 @@ class LauncherView(ui.View):
                 font=("<system>", 12),
                 name=n["url"],
                 action=self.button_action,
-                bg_color=n.get("color", "#000000"),
+                bg_color=n.get("color", ""),
                 tint_color="#ffffff",
                 corner_radius=6)
             self.add_subview(btn)
@@ -66,9 +68,10 @@ def crawling_notice():
     res = requests.get(URL)
     soup = BeautifulSoup(res.content, "html.parser")
     trs = soup.find_all("tr")
-    filtered = (get_notice(tr) for tr in trs[1+str(trs).count("btn_notice_ktc.gif"):] if get_notice(tr))
-    NOTICES = list(islice(filtered, 5))
-    return NOTICES
+    NOTICES = [notice for notice in map(get_notice, trs[1+str(trs).count("btn_notice_ktc.gif"):]) if notice]   
+    #filtered = (get_notice(tr) for tr in trs[1+str(trs).count("btn_notice_ktc.gif"):] if get_notice(tr))
+    #NOTICES = list(islice(filtered, 5))
+    return NOTICES[:LINES+1]
 
 def get_notice(tr):
     tds = tr.find_all("td")    
@@ -76,10 +79,13 @@ def get_notice(tr):
     if "글로벌" in title_token[0]:
         return False
     else:
-        title = "  ".join(title_token[1:])
+        title = " ".join(title_token[1:])
+        # print(title, len(title))
         date = "/".join(tds[3].get_text().strip().split("-")[1:])
-        url = "http://builder.hufs.ac.kr/user/" + tds[1].find("a").get("href")    
-    return {"date": date, "title": title, "url": url}
+        url = "http://builder.hufs.ac.kr/user/" + tds[1].find("a").get("href")
+        result = {"date": date, "title": title if len(title) <= MAX_LEN else title[:MAX_LEN-3] + "...", "url": url}
+        # print(result)    
+        return result
 
 def main():
     widget_name = __file__ + str(os.stat(__file__).st_mtime)
